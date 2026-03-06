@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tennis Performance Logbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            'crimson': { DEFAULT: '#b91c1c', light: '#dc2626', dim: '#7f1d1d' },
+            'lime-accent': { DEFAULT: '#a3e635', dim: '#4d7c0f', dark: '#365314' },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { -webkit-tap-highlight-color: transparent; }
+    .btn-tap {
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.2s ease,
+                  background-color 0.2s ease;
+    }
+    .btn-tap:hover { transform: translateY(-2px); }
+    .btn-tap:active { animation: tap-bounce 0.4s ease; }
+    @keyframes tap-bounce {
+      0% { transform: scale(0.96); }
+      50% { transform: scale(1.04); }
+      100% { transform: scale(1); }
+    }
+    .card { transition: box-shadow 0.2s ease; }
+    .card:hover { box-shadow: 0 4px 24px -4px rgba(0,0,0,0.3); }
+    input, input:focus { outline: none; }
+    input:focus { box-shadow: 0 0 0 2px rgba(163, 230, 53, 0.3); }
+    .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased">
+  <div class="max-w-2xl mx-auto px-4 py-6 pb-20">
+    <!-- Header -->
+    <header class="text-center mb-6">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight drop-shadow-sm">
+        Tennis Performance Logbook
+      </h1>
+      <p class="text-slate-500 text-sm mt-2 tracking-wide">Manual entry • Saved in browser</p>
+    </header>
+
+    <!-- Session Card -->
+    <section class="card mb-5 p-5 rounded-xl glass border border-slate-600/40 shadow-xl shadow-black/20">
+      <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-[0.2em] mb-4">Session</h2>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs text-slate-500 mb-1.5">Player Name</label>
+          <input
+            id="player-name"
+            type="text"
+            placeholder="Your name"
+            class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-600/60 text-slate-100 placeholder-slate-500 transition-all duration-200"
+          />
+        </div>
+        <div>
+          <label class="block text-xs text-slate-500 mb-1.5">Date</label>
+          <input
+            id="session-date"
+            type="date"
+            class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-600/60 text-slate-100 placeholder-slate-500 transition-all duration-200"
+          />
+        </div>
+        <div>
+          <label class="block text-xs text-slate-500 mb-1.5">Location</label>
+          <input
+            id="location"
+            type="text"
+            placeholder="Court, club, etc."
+            class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-600/60 text-slate-100 placeholder-slate-500 transition-all duration-200"
+          />
+        </div>
+        <div>
+          <label class="block text-xs text-slate-500 mb-1.5">Opponent Name</label>
+          <input
+            id="opponent-name"
+            type="text"
+            placeholder="Opponent"
+            class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-600/60 text-slate-100 placeholder-slate-500 transition-all duration-200"
+          />
+        </div>
+        <div>
+          <label class="block text-xs text-slate-500 mb-1.5">Opponent Gender</label>
+          <div class="flex gap-2">
+            <label class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-900/80 border border-slate-600/60 cursor-pointer transition-all duration-200 has-[:checked]:border-lime-400 has-[:checked]:bg-lime-400/10">
+              <input type="radio" name="opponent-gender" value="M" id="gender-m" class="accent-lime-400" checked />
+              <span>M</span>
+            </label>
+            <label class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-900/80 border border-slate-600/60 cursor-pointer transition-all duration-200 has-[:checked]:border-lime-400 has-[:checked]:bg-lime-400/10">
+              <input type="radio" name="opponent-gender" value="F" id="gender-f" class="accent-lime-400" />
+              <span>F</span>
+            </label>
+          </div>
+        </div>
+        <div class="flex gap-3 flex-wrap">
+          <div class="flex-1 min-w-[120px]">
+            <label class="block text-xs text-slate-500 mb-1.5">Match Result</label>
+            <div class="flex gap-2">
+              <label class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-900/80 border border-slate-600/60 cursor-pointer transition-all duration-200 has-[:checked]:border-lime-400 has-[:checked]:bg-lime-400/10">
+                <input type="radio" name="match-result" value="Win" id="result-win" class="accent-lime-400" checked />
+                <span>Win</span>
+              </label>
+              <label class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-900/80 border border-slate-600/60 cursor-pointer transition-all duration-200 has-[:checked]:border-slate-500 has-[:checked]:bg-slate-600/40">
+                <input type="radio" name="match-result" value="Loss" id="result-loss" class="accent-slate-500" />
+                <span>Loss</span>
+              </label>
+            </div>
+          </div>
+          <div class="flex-1 min-w-[100px]">
+            <label class="block text-xs text-slate-500 mb-1.5">Score</label>
+            <input
+              id="score"
+              type="text"
+              placeholder="e.g. 6:2"
+              class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-600/60 text-slate-100 placeholder-slate-500 transition-all duration-200"
+            />
+          </div>
+        </div>
+        <button
+          id="start-new-session"
+          class="btn-tap w-full py-3.5 rounded-xl bg-slate-700/60 border border-slate-600 text-slate-200 font-semibold hover:bg-slate-600/60 transition-colors"
+        >
+          Clear All
+        </button>
+      </div>
+    </section>
+
+    <!-- Player Analytics (Live Stats) -->
+    <section class="card mb-5 p-5 rounded-xl glass border border-slate-600/40 shadow-xl shadow-black/20">
+      <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-[0.2em] mb-4">Player Analytics</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="rounded-xl bg-slate-900/90 border border-slate-600/60 p-3 text-center">
+          <p class="text-[10px] uppercase tracking-wider text-slate-500 mb-0.5">📉 DF</p>
+          <p id="count-df" class="text-2xl font-bold text-red-400 tabular-nums">0</p>
+        </div>
+        <div class="rounded-xl bg-slate-900/90 border border-slate-600/60 p-3 text-center">
+          <p class="text-[10px] uppercase tracking-wider text-slate-500 mb-0.5">UE Net</p>
+          <p id="count-ue-net" class="text-2xl font-bold text-red-400 tabular-nums">0</p>
+        </div>
+        <div class="rounded-xl bg-slate-900/90 border border-slate-600/60 p-3 text-center">
+          <p class="text-[10px] uppercase tracking-wider text-slate-500 mb-0.5">UE Out</p>
+          <p id="count-ue-out" class="text-2xl font-bold text-red-400 tabular-nums">0</p>
+        </div>
+        <div class="rounded-xl bg-slate-900/90 border border-slate-600/60 p-3 text-center">
+          <p class="text-[10px] uppercase tracking-wider text-slate-500 mb-0.5">Volley</p>
+          <p id="count-volley" class="text-2xl font-bold text-red-400 tabular-nums">0</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Counters Card -->
+    <section class="card mb-5 p-5 rounded-xl glass border border-slate-600/40 shadow-xl shadow-black/20">
+      <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-[0.2em] mb-4">Counters (tap to add)</h2>
+      <div class="grid grid-cols-2 gap-3">
+        <button id="btn-double-fault" class="btn-tap py-5 rounded-xl bg-red-900/40 border-2 border-red-800 text-red-400 text-base font-bold hover:bg-red-800/50 transition-colors">
+          📉 Double Fault
+        </button>
+        <button id="btn-ue-net" class="btn-tap py-5 rounded-xl bg-red-900/40 border-2 border-red-800 text-red-400 text-base font-bold hover:bg-red-800/50 transition-colors">
+          📉 UE – Net
+        </button>
+        <button id="btn-ue-out" class="btn-tap py-5 rounded-xl bg-red-900/40 border-2 border-red-800 text-red-400 text-base font-bold hover:bg-red-800/50 transition-colors">
+          📉 UE – Out
+        </button>
+        <button id="btn-volley-miss" class="btn-tap py-5 rounded-xl bg-red-900/40 border-2 border-red-800 text-red-400 text-base font-bold hover:bg-red-800/50 transition-colors">
+          📉 Volley Miss
+        </button>
+      </div>
+    </section>
+
+    <!-- Save & Export Card -->
+    <section class="card mb-5 p-5 rounded-xl glass border border-slate-600/40 shadow-xl shadow-black/20 space-y-3">
+      <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-[0.2em] mb-2">Session Controls</h2>
+      <button
+        id="save-session"
+        class="btn-tap w-full py-4 rounded-xl bg-lime-500/20 border-2 border-lime-400/60 text-lime-400 font-semibold hover:bg-lime-400/30 transition-colors"
+      >
+        🏆 Save Session to History
+      </button>
+      <button
+        id="export-csv"
+        class="btn-tap w-full py-4 rounded-xl bg-lime-500/20 border-2 border-lime-400/60 text-lime-400 font-semibold hover:bg-lime-400/30 transition-colors"
+      >
+        Export to CSV
+      </button>
+    </section>
+
+    <!-- Match History Card -->
+    <section class="card p-5 rounded-xl glass border border-slate-600/40 shadow-xl shadow-black/20">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-[0.2em]">Match History</h2>
+        <button id="clear-filter" class="hidden text-xs px-3 py-1.5 rounded-xl bg-slate-600/60 text-slate-400 hover:bg-slate-500/60 transition-colors">Clear Filter</button>
+      </div>
+      <div id="history-list" class="space-y-3">
+        <p id="history-empty" class="py-10 text-center text-slate-500 text-sm">No sessions saved yet. Tap "Save Session to History" after counting.</p>
+      </div>
+    </section>
+
+    <!-- Player Record Center -->
+    <section class="card mt-6 p-5 rounded-xl glass border border-slate-600/40 shadow-xl shadow-black/20">
+      <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-[0.2em] mb-4">Player Record Center</h2>
+      <div id="record-center" class="space-y-3">
+        <p id="record-empty" class="py-8 text-center text-slate-500 text-sm">No player records yet. Save matches to build your record center.</p>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'tennis-logbook-data';
+    const SESSION_KEY = 'tennis-logbook-session';
+
+    const state = {
+      doubleFault: 0,
+      ueNet: 0,
+      ueOut: 0,
+      volleyMiss: 0,
+    };
+
+    let history = [];
+
+    let filterPlayer = null;
+
+    const els = {
+      playerName: document.getElementById('player-name'),
+      sessionDate: document.getElementById('session-date'),
+      location: document.getElementById('location'),
+      opponentName: document.getElementById('opponent-name'),
+      genderM: document.getElementById('gender-m'),
+      genderF: document.getElementById('gender-f'),
+      resultWin: document.getElementById('result-win'),
+      resultLoss: document.getElementById('result-loss'),
+      score: document.getElementById('score'),
+      startNewSession: document.getElementById('start-new-session'),
+      countDf: document.getElementById('count-df'),
+      countUeNet: document.getElementById('count-ue-net'),
+      countUeOut: document.getElementById('count-ue-out'),
+      countVolley: document.getElementById('count-volley'),
+      saveSession: document.getElementById('save-session'),
+      exportCsv: document.getElementById('export-csv'),
+      historyList: document.getElementById('history-list'),
+      historyEmpty: document.getElementById('history-empty'),
+      clearFilter: document.getElementById('clear-filter'),
+      recordCenter: document.getElementById('record-center'),
+      recordEmpty: document.getElementById('record-empty'),
+    };
+
+    const buttons = {
+      df: document.getElementById('btn-double-fault'),
+      ueNet: document.getElementById('btn-ue-net'),
+      ueOut: document.getElementById('btn-ue-out'),
+      volleyMiss: document.getElementById('btn-volley-miss'),
+    };
+
+    function setDateToToday() {
+      const d = new Date();
+      els.sessionDate.value = d.toISOString().slice(0, 10);
+    }
+
+    function loadSession() {
+      try {
+        const raw = localStorage.getItem(SESSION_KEY);
+        if (raw) {
+          const data = JSON.parse(raw);
+          els.playerName.value = data.playerName || '';
+          els.sessionDate.value = data.date || new Date().toISOString().slice(0, 10);
+          els.location.value = data.location || '';
+          els.opponentName.value = data.opponentName || '';
+          if (data.opponentGender === 'F') { els.genderF.checked = true; els.genderM.checked = false; }
+          else { els.genderM.checked = true; els.genderF.checked = false; }
+          if (data.matchResult === 'Loss') { els.resultLoss.checked = true; els.resultWin.checked = false; }
+          else { els.resultWin.checked = true; els.resultLoss.checked = false; }
+          els.score.value = data.score || '';
+          state.doubleFault = data.doubleFault || 0;
+          state.ueNet = data.ueNet || 0;
+          state.ueOut = data.ueOut || 0;
+          state.volleyMiss = data.volleyMiss || 0;
+        }
+      } catch (_) {}
+    }
+
+    function getOpponentGender() {
+      return els.genderF.checked ? 'F' : 'M';
+    }
+
+    function getMatchResult() {
+      return els.resultLoss.checked ? 'Loss' : 'Win';
+    }
+
+    function saveSessionToStorage() {
+      const data = {
+        playerName: els.playerName.value.trim(),
+        date: els.sessionDate.value,
+        location: els.location.value.trim(),
+        opponentName: els.opponentName.value.trim(),
+        opponentGender: getOpponentGender(),
+        matchResult: getMatchResult(),
+        score: els.score.value.trim(),
+        doubleFault: state.doubleFault,
+        ueNet: state.ueNet,
+        ueOut: state.ueOut,
+        volleyMiss: state.volleyMiss,
+      };
+      localStorage.setItem(SESSION_KEY, JSON.stringify(data));
+    }
+
+    function loadHistory() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        history = raw ? JSON.parse(raw) : [];
+      } catch (_) {
+        history = [];
+      }
+    }
+
+    function saveHistoryToStorage() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    }
+
+    function renderCounts() {
+      els.countDf.textContent = state.doubleFault;
+      els.countUeNet.textContent = state.ueNet;
+      els.countUeOut.textContent = state.ueOut;
+      els.countVolley.textContent = state.volleyMiss;
+      saveSessionToStorage();
+    }
+
+    function getFilteredHistory() {
+      if (!filterPlayer) return history;
+      return history.filter(e => {
+        const p = (e.playerName || '').trim();
+        const o = (e.opponentName || '').trim();
+        return p === filterPlayer || o === filterPlayer;
+      });
+    }
+
+    function renderHistory() {
+      const filtered = getFilteredHistory();
+      if (filtered.length === 0) {
+        els.historyEmpty.hidden = false;
+        els.historyEmpty.textContent = filterPlayer
+          ? `No matches found for "${filterPlayer}".`
+          : 'No sessions saved yet. Tap "Save Session to History" after counting.';
+        els.historyList.querySelectorAll('.history-row').forEach(el => el.remove());
+        els.clearFilter.classList.toggle('hidden', !filterPlayer);
+        return;
+      }
+      els.historyEmpty.hidden = true;
+      els.clearFilter.classList.toggle('hidden', !filterPlayer);
+      const existing = els.historyList.querySelectorAll('.history-row');
+      const needed = filtered.length;
+      if (existing.length > needed) {
+        existing.forEach((el, i) => i >= needed && el.remove());
+      }
+      filtered.forEach((entry, idx) => {
+        const i = history.indexOf(entry);
+        let row = els.historyList.querySelector(`.history-row[data-i="${i}"]`);
+        if (!row) {
+          row = document.createElement('div');
+          row.className = 'history-row rounded-xl border border-slate-600/40 overflow-hidden';
+          row.setAttribute('data-i', i);
+          els.historyList.appendChild(row);
+        }
+        const isWin = (entry.matchResult || 'Win') === 'Win';
+        const badgeClass = isWin ? 'bg-lime-500/20 text-lime-400 border-lime-400/40' : 'bg-slate-600/60 text-red-400/90 border-slate-500/60';
+        const playerName = escapeHtml(entry.playerName || '—');
+        const opponentName = escapeHtml(entry.opponentName || '—');
+        const score = entry.score ? escapeHtml(entry.score) : '—';
+        const narrative = isWin
+          ? `${playerName} ${score} defeated ${opponentName || '—'}`
+          : `${playerName} ${score} lost to ${opponentName || '—'}`;
+        const subLine = [entry.location ? escapeHtml(entry.location) : '', entry.date || ''].filter(Boolean).join(' · ');
+        row.innerHTML = `
+          <div class="p-4 bg-slate-900/60 flex flex-col sm:flex-row sm:items-start gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex flex-wrap items-center gap-2 mb-2">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-xl text-xs font-bold uppercase tracking-wider ${badgeClass} border">${entry.matchResult || 'Win'}</span>
+              </div>
+              <p class="text-slate-200 text-sm font-medium">${narrative}</p>
+              ${subLine ? `<p class="text-slate-500 text-xs mt-1">${subLine}</p>` : ''}
+              <p class="text-red-400/90 text-xs mt-2">DF: ${entry.doubleFault} · UE N: ${entry.ueNet} · UE O: ${entry.ueOut} · VM: ${entry.volleyMiss}</p>
+            </div>
+            <button type="button" class="delete-session btn-tap shrink-0 self-end sm:self-start px-3 py-1.5 rounded-xl bg-slate-700/60 border border-slate-600 text-slate-400 text-xs font-medium hover:bg-red-900/50 hover:border-red-800 hover:text-red-400 transition-colors" data-i="${i}">Delete</button>
+          </div>
+        `;
+        row.querySelector('.delete-session').addEventListener('click', () => deleteSession(i));
+      });
+    }
+
+    function escapeHtml(s) {
+      const div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    function deleteSession(index) {
+      history.splice(index, 1);
+      saveHistoryToStorage();
+      renderHistory();
+      renderRecordCenter();
+    }
+
+    function getPlayerStats() {
+      const stats = {};
+      history.forEach(entry => {
+        const p = (entry.playerName || '').trim() || 'Unknown';
+        if (!stats[p]) {
+          stats[p] = { matches: 0, wins: 0, totalDf: 0 };
+        }
+        stats[p].matches++;
+        if ((entry.matchResult || 'Win') === 'Win') stats[p].wins++;
+        stats[p].totalDf += entry.doubleFault ?? 0;
+      });
+      return stats;
+    }
+
+    function renderRecordCenter() {
+      const stats = getPlayerStats();
+      const players = Object.keys(stats);
+      els.recordCenter.querySelectorAll('.player-card').forEach(el => el.remove());
+      if (players.length === 0) {
+        els.recordEmpty.hidden = false;
+        return;
+      }
+      els.recordEmpty.hidden = true;
+      players.forEach(name => {
+        const s = stats[name];
+        const winRate = s.matches > 0 ? Math.round((s.wins / s.matches) * 100) : 0;
+        const avgDf = s.matches > 0 ? (s.totalDf / s.matches).toFixed(1) : '0';
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'player-card btn-tap w-full text-left p-4 rounded-xl glass border border-slate-600/40 hover:border-slate-500/60 transition-colors ' + (filterPlayer === name ? 'ring-2 ring-lime-400/50' : '');
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-slate-200">${escapeHtml(name)}</span>
+            <span class="text-xs text-slate-500">${s.matches} match${s.matches !== 1 ? 'es' : ''}</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 mt-3 text-sm">
+            <div><span class="text-slate-500">Win Rate</span><br><span class="font-bold text-lime-400">${winRate}%</span></div>
+            <div><span class="text-slate-500">Avg DF</span><br><span class="font-bold text-red-400">${avgDf}</span></div>
+          </div>
+        `;
+        card.addEventListener('click', () => {
+          filterPlayer = filterPlayer === name ? null : name;
+          renderHistory();
+          renderRecordCenter();
+        });
+        els.recordCenter.appendChild(card);
+      });
+    }
+
+    function addToHistory() {
+      const playerName = els.playerName.value.trim();
+      const date = els.sessionDate.value;
+      if (!date) return;
+      history.unshift({
+        playerName: playerName || 'Unknown',
+        date,
+        location: els.location.value.trim(),
+        opponentName: els.opponentName.value.trim(),
+        opponentGender: getOpponentGender(),
+        matchResult: getMatchResult(),
+        score: els.score.value.trim(),
+        doubleFault: state.doubleFault,
+        ueNet: state.ueNet,
+        ueOut: state.ueOut,
+        volleyMiss: state.volleyMiss,
+      });
+      saveHistoryToStorage();
+      renderHistory();
+      renderRecordCenter();
+      state.doubleFault = 0;
+      state.ueNet = 0;
+      state.ueOut = 0;
+      state.volleyMiss = 0;
+      renderCounts();
+    }
+
+    function exportToCsv() {
+      if (history.length === 0) {
+        alert('No sessions in history. Save at least one session first.');
+        return;
+      }
+      const headers = ['Player Name', 'Date', 'Location', 'Opponent Name', 'Opponent Gender', 'Match Result', 'Score', 'Double Fault', 'UE Net', 'UE Out', 'Volley Miss'];
+      const rows = history.map(e => [
+        (e.playerName || '').replace(/"/g, '""'),
+        e.date || '',
+        (e.location || '').replace(/"/g, '""'),
+        (e.opponentName || '').replace(/"/g, '""'),
+        e.opponentGender || '',
+        e.matchResult || 'Win',
+        (e.score || '').replace(/"/g, '""'),
+        e.doubleFault ?? '',
+        e.ueNet ?? '',
+        e.ueOut ?? '',
+        e.volleyMiss ?? '',
+      ]);
+      const csvContent = [
+        headers.join(','),
+        ...rows.map(r => r.map(c => `"${String(c)}"`).join(',')),
+      ].join('\r\n');
+      const BOM = '\uFEFF';
+      const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `tennis-logbook-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    els.startNewSession.addEventListener('click', () => {
+      state.doubleFault = 0;
+      state.ueNet = 0;
+      state.ueOut = 0;
+      state.volleyMiss = 0;
+      renderCounts();
+    });
+
+    buttons.df.addEventListener('click', () => { state.doubleFault++; renderCounts(); });
+    buttons.ueNet.addEventListener('click', () => { state.ueNet++; renderCounts(); });
+    buttons.ueOut.addEventListener('click', () => { state.ueOut++; renderCounts(); });
+    buttons.volleyMiss.addEventListener('click', () => { state.volleyMiss++; renderCounts(); });
+
+    els.playerName.addEventListener('change', saveSessionToStorage);
+    els.playerName.addEventListener('blur', saveSessionToStorage);
+    els.sessionDate.addEventListener('change', saveSessionToStorage);
+    els.location.addEventListener('change', saveSessionToStorage);
+    els.location.addEventListener('blur', saveSessionToStorage);
+    els.opponentName.addEventListener('change', saveSessionToStorage);
+    els.opponentName.addEventListener('blur', saveSessionToStorage);
+    els.genderM.addEventListener('change', saveSessionToStorage);
+    els.genderF.addEventListener('change', saveSessionToStorage);
+    els.resultWin.addEventListener('change', saveSessionToStorage);
+    els.resultLoss.addEventListener('change', saveSessionToStorage);
+    els.score.addEventListener('change', saveSessionToStorage);
+    els.score.addEventListener('blur', saveSessionToStorage);
+
+    els.saveSession.addEventListener('click', addToHistory);
+    els.exportCsv.addEventListener('click', exportToCsv);
+    els.clearFilter.addEventListener('click', () => {
+      filterPlayer = null;
+      renderHistory();
+      renderRecordCenter();
+    });
+
+    setDateToToday();
+    loadHistory();
+    loadSession();
+    renderCounts();
+    renderHistory();
+    renderRecordCenter();
+  </script>
+</body>
+</html>
