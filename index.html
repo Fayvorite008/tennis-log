@@ -3,50 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tennis Log Hub</title>
+    <title>Tennis Hub 🎾</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #0b0f19; color: #e2e8f0; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .bg-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: #a3e635; filter: blur(120px); opacity: 0.1; z-index: 0; }
-        .glass-card { background: rgba(22, 30, 46, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); transition: all 0.3s ease; }
-        .glass-card:active { transform: scale(0.98); background: rgba(22, 30, 46, 0.9); }
-    </style>
 </head>
-<body class="p-6">
-    <div class="bg-glow"></div>
-    
-    <div class="relative z-10 w-full max-w-sm">
-        <header class="text-center mb-12">
-            <h1 class="text-4xl font-900 tracking-tighter italic text-white uppercase">Tennis <span class="text-lime-400">Hub</span></h1>
-            <p class="text-slate-500 text-[10px] mt-2 uppercase tracking-[0.4em]">Select Your Training Mode</p>
-        </header>
-
+<body class="bg-[#0b0f19] text-white flex items-center justify-center h-screen p-6">
+    <div class="w-full max-w-xs space-y-6 text-center">
+        <h1 class="text-4xl font-black italic uppercase tracking-tighter">Tennis <span class="text-lime-400">Hub</span></h1>
+        
         <div class="space-y-4">
-            <a href="./solo/" class="glass-card block p-6 rounded-2xl group border-l-4 border-l-lime-400">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl font-bold text-white group-hover:text-lime-400 transition-colors">Solo Practice</h2>
-                        <p class="text-[10px] text-slate-500 uppercase mt-1">Self-improvement & Drills</p>
-                    </div>
-                    <span class="text-2xl text-lime-400">👤</span>
-                </div>
+            <a href="./solo/" class="block p-6 bg-slate-800/50 rounded-2xl border-l-4 border-lime-400 hover:bg-slate-800 transition-all">
+                <div class="text-xl font-bold">Solo Practice</div>
+                <p class="text-[10px] text-slate-500 uppercase mt-1">👤 Single Player Mode</p>
             </a>
 
-            <a href="./luv-all/" class="glass-card block p-6 rounded-2xl group border-l-4 border-l-sky-400">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl font-bold text-white group-hover:text-sky-400 transition-colors">Love All Log</h2>
-                        <p class="text-[10px] text-slate-500 uppercase mt-1">Dual Battle & Match Stats</p>
-                    </div>
-                    <span class="text-2xl text-sky-400">🎾</span>
-                </div>
+            <a href="./luv-all/" class="block p-6 bg-slate-800/50 rounded-2xl border-l-4 border-sky-400 hover:bg-slate-800 transition-all">
+                <div class="text-xl font-bold text-white">Love All Log</div>
+                <p class="text-[10px] text-slate-500 uppercase mt-1">🎾 Dual Battle Mode</p>
             </a>
         </div>
-
-        <footer class="mt-16 text-center">
-            <p class="text-[8px] text-slate-600 uppercase tracking-widest font-bold">Design for Pro Players • 2026</p>
-        </footer>
     </div>
 </body>
 </html>
