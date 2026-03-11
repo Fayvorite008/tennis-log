@@ -1,53 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>菜狗记录库 🎾</title>
+    <title>Love All Log | 菜狗记录库</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #0b0f19; color: #e2e8f0; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        /* 背景光晕效果 */
-        .bg-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: #a3e635; filter: blur(120px); opacity: 0.1; z-index: 0; }
-        .glass-card { background: rgba(22, 30, 46, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); transition: all 0.3s ease; }
-        .glass-card:active { transform: scale(0.98); background: rgba(22, 30, 46, 0.9); }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .btn-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+        }
     </style>
 </head>
-<body class="p-6">
-    <div class="bg-glow"></div>
-    
-    <div class="relative z-10 w-full max-w-sm">
-        <header class="text-center mb-12">
-            <h1 class="text-4xl font-900 tracking-tighter italic text-white">菜狗<span class="text-lime-400">记录库</span> 🎾</h1>
-            <p class="text-slate-500 text-[10px] mt-2 uppercase tracking-[0.4em] font-bold">Eat Sleep Tennis Repeat</p>
-        </header>
+<body class="min-h-screen flex flex-col items-center justify-center p-6">
 
-        <div class="space-y-4">
-            <a href="./solo/" class="glass-card block p-6 rounded-2xl group border-l-4 border-l-lime-400 shadow-xl">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl font-bold text-white group-hover:text-lime-400 transition-colors">单人练球模式</h2>
-                        <p class="text-[10px] text-slate-500 uppercase mt-1">Solo Drills & Progress</p>
-                    </div>
-                    <span class="text-2xl">👤</span>
-                </div>
-            </a>
-
-            <a href="./love-all/" class="glass-card block p-6 rounded-2xl group border-l-4 border-l-sky-400 shadow-xl">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-xl font-bold text-white group-hover:text-sky-400 transition-colors">Love All 对战</h2>
-                        <p class="text-[10px] text-slate-500 uppercase mt-1">Dual Battle & Stats</p>
-                    </div>
-                    <span class="text-2xl">🏆</span>
-                </div>
-            </a>
-        </div>
-
-        <footer class="mt-16 text-center">
-            <p class="text-[8px] text-slate-600 uppercase tracking-widest font-bold opacity-50">Powered by Love All Log • 2026</p>
-        </footer>
+    <div class="text-center mb-12">
+        <h1 class="text-5xl font-black tracking-tighter italic uppercase mb-2">
+            Love All <span class="text-indigo-400 text-3xl">Log</span> 🐶
+        </h1>
+        <p class="text-slate-500 text-xs tracking-widest uppercase font-bold">
+            菜狗记录库 · 无论单双，都要优雅 
+        </p>
     </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
+        
+        <a href="./battle/index.html" class="glass-card p-8 rounded-3xl btn-hover flex flex-col items-center group">
+            <div class="w-16 h-16 bg-indigo-500/20 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-indigo-500/40">
+                <span class="text-3xl">🎾</span>
+            </div>
+            <h2 class="text-xl font-bold mb-1">Love All 对战</h2>
+            <p class="text-slate-400 text-xs">单人/1v1 表现分记录</p>
+        </a>
+
+        <a href="./doubles/index.html" class="glass-card p-8 rounded-3xl btn-hover flex flex-col items-center group">
+            <div class="w-16 h-16 bg-pink-500/20 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-pink-500/40">
+                <span class="text-3xl">👯‍♂️</span>
+            </div>
+            <h2 class="text-xl font-bold mb-1">Love All 双打</h2>
+            <p class="text-slate-400 text-xs"> 双打 · 谁是真大腿</p>
+        </a>
+
+    </div>
+
+    <div class="mt-16 text-center">
+        <div class="px-4 py-2 rounded-full border border-white/5 text-[10px] text-slate-600 uppercase tracking-widest">
+            Faye's Personal Lab · Vibe Coding 1.0
+        </div>
+    </div>
+
 </body>
 </html>
