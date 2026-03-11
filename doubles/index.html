@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love All Doubles | 现形现场</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; }
+        .player-card { background: #1e293b; border-radius: 16px; overflow: hidden; position: relative; transition: transform 0.2s; }
+        .side-bar-1 { width: 6px; background: #6366f1; position: absolute; left: 0; top: 0; bottom: 0; }
+        .side-bar-2 { width: 6px; background: #ec4899; position: absolute; left: 0; top: 0; bottom: 0; }
+        .stat-btn { background: rgba(255,255,255,0.05); border-radius: 8px; transition: all 0.1s; -webkit-tap-highlight-color: transparent; }
+        .stat-btn:active { background: rgba(255,255,255,0.2); transform: scale(0.95); }
+        input { background: transparent; border: none; outline: none; text-align: center; color: white; width: 100%; font-weight: bold; }
+    </style>
+</head>
+<body class="p-4 min-h-screen flex flex-col items-center">
 
+    <div id="capture-area" class="w-full max-w-md p-4 bg-[#0f172a]">
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-black italic">谁是菜狗？现形现场 🐶</h1>
+            <p class="text-slate-500 text-[10px] tracking-[0.2em] uppercase">Love All Doubles Session</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div class="player-card p-4 pl-6"><div class="side-bar-1"></div><input value="PLAYER A">
+                <div class="stats mt-3 space-y-2 text-xs"></div>
+                <div class="perf mt-3 pt-2 border-t border-white/5 text-center font-bold text-indigo-400">PERF: 0</div>
+            </div>
+            <div class="player-card p-4 pl-6"><div class="side-bar-1"></div><input value="PLAYER B">
+                <div class="stats mt-3 space-y-2 text-xs"></div>
+                <div class="perf mt-3 pt-2 border-t border-white/5 text-center font-bold text-indigo-400">PERF: 0</div>
+            </div>
+            <div class="player-card p-4 pl-6"><div class="side-bar-2"></div><input value="PLAYER C">
+                <div class="stats mt-3 space-y-2 text-xs"></div>
+                <div class="perf mt-3 pt-2 border-t border-white/5 text-center font-bold text-pink-400">PERF: 0</div>
+            </div>
+            <div class="player-card p-4 pl-6"><div class="side-bar-2"></div><input value="PLAYER D">
+                <div class="stats mt-3 space-y-2 text-xs"></div>
+                <div class="perf mt-3 pt-2 border-t border-white/5 text-center font-bold text-pink-400">PERF: 0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 flex gap-4">
+        <button onclick="exportImage()" class="bg-indigo-600 px-6 py-3 rounded-full font-bold text-sm shadow-lg shadow-indigo-500/30">导出今日处刑单 📸</button>
+        <button onclick="location.reload()" class="bg-slate-700 px-6 py-3 rounded-full font-bold text-sm">重置</button>
+    </div>
+
+    <script>
+        const statsConfig = [
+            { id: '1st', label: '1ST IN' }, { id: 'df', label: 'DF' },
+            { id: 'ue', label: 'UE' }, { id: 'wn', label: 'WN' }, { id: 'vol', label: 'VOL' }
+        ];
+
+        document.querySelectorAll('.stats').forEach((container, pIdx) => {
+            statsConfig.forEach(s => {
+                const btn = document.createElement('div');
+                btn.className = 'stat-btn p-2 flex justify-between items-center cursor-pointer';
+                btn.innerHTML = `<span class="opacity-50">${s.label}</span><span class="font-mono font-bold text-lg" id="p${pIdx}-${s.id}">0</span>`;
+                
+                // 点击 +1
+                btn.onclick = () => updateStat(pIdx, s.id, 1);
+                // 长按 -1 (移动端友好)
+                let timer;
+                btn.onmousedown = btn.ontouchstart = (e) => { timer = setTimeout(() => updateStat(pIdx, s.id, -1), 500); };
+                btn.onmouseup = btn.ontouchend = () => clearTimeout(timer);
+                
+                container.appendChild(btn);
+            });
+        });
+
+        function updateStat(pIdx, sId, val) {
+            const el = document.getElementById(`p${pIdx}-${sId}`);
+            let cur = parseInt(el.innerText) + val;
+            el.innerText = cur < 0 ? 0 : cur;
+            calcPerf(pIdx);
+        }
+
+        function calcPerf(pIdx) {
+            const getVal = (id) => parseInt(document.getElementById(`p${pIdx}-${id}`).innerText);
+            const score = (getVal('wn') * 2 + getVal('vol')) - (getVal('df') + getVal('ue'));
+            document.querySelectorAll('.perf')[pIdx].innerText = `PERF: ${score}`;
+        }
+
+        function exportImage() {
+            const btn = event.target;
+            btn.innerText = "生成中...";
+            html2canvas(document.querySelector("#capture-area"), { backgroundColor: "#0f172a", scale: 2 }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `LoveAll-Doubles-${new Date().toLocaleDateString()}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+                btn.innerText = "导出今日处刑单 📸";
+            });
+        }
+    </script>
+</body>
+</html>
