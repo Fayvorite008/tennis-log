@@ -1,132 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Love All Doubles | CGI Index</title>
+    <title>Love All Doubles | CGI V6</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0a0f1e; color: white; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
-        /* Card Structure */
-        .card { background: #1a2236; border-radius: 12px; border-left: 5px solid; transition: all 0.2s; position: relative; padding: 10px; }
-        .team-1 { border-left-color: #6366f1; }
-        .team-2 { border-left-color: #ec4899; }
-        /* Compact Stat Rows */
-        .stat-row { background: rgba(255,255,255,0.02); border-radius: 6px; margin-bottom: 3px; padding: 2px 6px; display: flex; justify-content: space-between; align-items: center; }
-        .circle-btn { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; transition: all 0.1s; }
-        .circle-btn:active { background: rgba(255,255,255,0.2); transform: scale(0.9); }
-        /* Name & CGI Alignment */
-        input.name-input { background: transparent; border: none; outline: none; font-weight: 800; width: auto; flex-grow: 1; }
-        input.score-board { background: transparent; border: none; outline: none; font-weight: 900; width: 60px; text-align: center; color: white; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0b1120; color: white; -webkit-tap-highlight-color: transparent; }
+        .glass-card { background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 12px; }
+        .team-1 { border-left: 5px solid #6366f1; }
+        .team-2 { border-left: 5px solid #ec4899; }
+        .stat-btn-row { background: rgba(255,255,255,0.02); border-radius: 8px; margin-bottom: 3px; padding: 2px 6px; display: flex; justify-content: space-between; align-items: center; }
+        .circle-btn { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
+        .circle-btn:active { background: rgba(255,255,255,0.15); transform: scale(0.95); }
+        input { background: transparent; border: none; color: white; outline: none; }
     </style>
 </head>
 <body class="p-2 flex flex-col items-center min-h-screen">
 
-    <div class="w-full max-w-sm flex justify-between items-center my-3 px-4 py-2 bg-[#1a2236] rounded-xl border border-white/5">
+    <header class="text-center mb-6 mt-4">
+        <h1 class="text-3xl font-800 tracking-tighter italic text-white">LOVE ALL <span class="text-lime-400">LOG</span> 🐶</h1>
+        <p class="text-slate-500 text-[10px] mt-1 uppercase tracking-[0.3em] font-bold">菜狗记录库 · 无论单双，都要优雅</p>
+    </header>
+
+    <div class="flex justify-between items-center w-full max-w-sm mb-6 px-4 py-2 glass-card">
         <div class="text-center">
-            <input id="score-t1" type="number" value="0" class="score-board text-3xl text-indigo-400">
-            <p class="text-[7px] text-indigo-400/60 font-black tracking-widest uppercase -mt-1">TEAM 1</p>
+            <input type="number" value="0" class="text-3xl font-black text-indigo-400 text-center w-16 bg-transparent outline-none">
+            <p class="text-[7px] text-indigo-400 uppercase tracking-widest -mt-1 font-bold">T1</p>
         </div>
-        <div class="text-slate-700 italic font-black text-xl px-2">VS</div>
+        <div class="text-slate-700 italic font-black text-xl">VS</div>
         <div class="text-center">
-            <input id="score-t2" type="number" value="0" class="score-board text-3xl text-pink-400">
-            <p class="text-[7px] text-pink-400/60 font-black tracking-widest uppercase -mt-1">TEAM 2</p>
+            <input type="number" value="0" class="text-3xl font-black text-pink-400 text-center w-16 bg-transparent outline-none">
+            <p class="text-[7px] text-pink-400 uppercase tracking-widest -mt-1 font-bold">T2</p>
         </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-2 w-full max-w-sm" id="player-grid"></div>
+    <div class="grid grid-cols-2 gap-2 w-full max-w-sm" id="grid"></div>
 
-    <div class="w-full max-w-sm mt-4 text-center">
-        <button onclick="saveMatch()" class="text-[10px] text-emerald-500 font-black uppercase tracking-widest underline active:opacity-60">Save to History</button>
+    <div class="w-full max-w-sm mt-6 text-center">
+        <button onclick="saveSession()" class="text-[11px] text-emerald-500 font-black uppercase tracking-widest active:opacity-60 underline">Log this session</button>
     </div>
 
-    <details class="w-full max-w-sm mt-6 text-slate-700">
-        <summary class="text-center text-[9px] uppercase tracking-[0.3em] cursor-pointer active:opacity-60">Expand Logs</summary>
-        <div id="history-list" class="mt-3 space-y-2 text-[9px] font-mono"></div>
-        <button onclick="clearAll()" class="w-full mt-4 text-[7px] text-red-900 uppercase underline tracking-widest">Clear All Data</button>
-    </details>
+    <div class="w-full max-w-sm mt-10 space-y-3 pb-16">
+        <h3 class="text-center text-[9px] text-slate-500 uppercase tracking-[0.4em] font-bold">Previous Match Logs</h3>
+        <div id="history-list" class="space-y-2 text-[10px] font-mono text-slate-700"></div>
+    </div>
 
     <script>
-        // Data Configuration (Full English)
-        const config = [
-            { id: '1st', label: '1ST IN' }, 
-            { id: 'df', label: 'DF' },
-            { id: 'ue', label: 'UE' }, 
-            { id: 'wn', label: 'WN' }, 
-            { id: 'vol', label: 'VOL' }
+        const stats = [
+            { id: 'wn', label: 'WN' }, { id: 'vol', label: 'VOL' },
+            { id: 'df', label: 'DF' }, { id: 'ue', label: 'UE' }
         ];
-        
-        let players = JSON.parse(localStorage.getItem('current_match')) || Array(4).fill().map(() => ({ name: '', stats: { '1st':0, df:0, ue:0, wn:0, vol:0 } }));
-        let history = JSON.parse(localStorage.getItem('match_history')) || [];
+        let pData = Array(4).fill().map(() => ({ wn:0, vol:0, df:0, ue:0 }));
+        let history = JSON.parse(localStorage.getItem('doubles_history_v1') || '[]');
 
         function calculateCGI(p) {
-            let score = 50; 
-            score += (p.stats['1st'] * 2); 
-            score -= (p.stats['df'] * 8); 
-            score -= (p.stats['ue'] * 4);
-            score += (p.stats['wn'] * 6); 
-            score += (p.stats['vol'] * 4);
+            let score = 50 + (p.wn * 6 + p.vol * 4) - (p.df * 8 + p.ue * 4);
             return Math.min(100, Math.max(0, score));
         }
 
         function render() {
-            const grid = document.getElementById('player-grid');
+            const grid = document.getElementById('grid');
             grid.innerHTML = '';
-            players.forEach((p, i) => {
-                const isT1 = i < 2;
+            pData.forEach((p, i) => {
                 const cgi = calculateCGI(p);
-                const colorClass = isT1 ? 'text-indigo-400' : 'text-pink-400';
-                
                 const card = document.createElement('div');
-                card.className = `card ${isT1 ? 'team-1' : 'team-2'}`;
-                
-                let statsHtml = config.map(s => `
-                    <div class="stat-row">
+                card.className = `glass-card p-3 ${i<2?'team-1':'team-2'}`;
+                let rows = stats.map(s => `
+                    <div class="stat-btn-row">
                         <span class="text-[8px] opacity-30 font-bold tracking-tighter">${s.label}</span>
                         <div class="flex items-center gap-1.5">
                             <button onclick="change(${i},'${s.id}',-1)" class="circle-btn bg-white/5 text-slate-600">-</button>
-                            <span class="font-mono font-bold w-3 text-center text-xs">${p.stats[s.id]}</span>
+                            <span class="font-mono font-bold w-3 text-center text-xs">${p[s.id]}</span>
                             <button onclick="change(${i},'${s.id}',1)" class="circle-btn bg-white/10 text-white">+</button>
                         </div>
-                    </div>
-                `).join('');
-
+                    </div>`).join('');
                 card.innerHTML = `
-                    <div class="flex justify-between items-center mb-2 px-1 gap-1">
-                        <input class="name-input text-[11px] ${colorClass} uppercase truncate" placeholder="PLAYER ${String.fromCharCode(65+i)}" value="${p.name}" onchange="updateName(${i}, this.value)">
-                        <span class="text-sm font-black ${cgi > 80 ? 'text-yellow-400' : cgi < 40 ? 'text-slate-600' : 'text-white'}">${cgi}</span>
-                    </div>
-                    <div class="flex-1 space-y-0.5">${statsHtml}</div>
-                `;
+                    <div class="flex justify-between items-center mb-2"><input class="text-[11px] font-bold text-slate-500 uppercase truncate w-3/4" value="Player ${String.fromCharCode(65+i)}">
+                        <span class="text-xs font-black ${cgi>80?'text-yellow-400':cgi<40?'text-red-500':'text-white'}">${cgi}</span></div>
+                    <div class="space-y-0.5">${rows}</div>`;
                 grid.appendChild(card);
             });
-            localStorage.setItem('current_match', JSON.stringify(players));
             renderHistory();
         }
 
-        function change(pIdx, sId, val) {
-            players[pIdx].stats[sId] = Math.max(0, players[pIdx].stats[sId] + val); render();
+        function change(i, s, v) { pData[i][s] = Math.max(0, pData[i][s]+v); render(); }
+        function saveSession() {
+            history.unshift({id: Date.now(), players: JSON.parse(JSON.stringify(pData))});
+            localStorage.setItem('doubles_history_v1', JSON.stringify(history));
+            renderHistory();
+            alert('Match Logged Successfully!');
         }
-
-        function updateName(i, val) { players[i].name = val; localStorage.setItem('current_match', JSON.stringify(players)); }
-
-        function saveMatch() {
-            const data = {
-                id: Date.now(),
-                score: `${document.getElementById('score-t1').value}:${document.getElementById('score-t2').value}`,
-                summary: players.map(p => `${p.name || '?'}(${calculateCGI(p)})`).join(' ')
-            };
-            history.unshift(data); localStorage.setItem('match_history', JSON.stringify(history)); renderHistory();
-            alert('Match Logged Successfully');
-        }
-
         function renderHistory() {
             const list = document.getElementById('history-list');
-            list.innerHTML = history.map(h => `<div class="p-1.5 bg-white/5 rounded">RESULT ${h.score} | ${h.summary}</div>`).join('');
+            list.innerHTML = history.map(h => `<div class="bg-slate-900/60 rounded p-1.5 border border-white/5">LOG | P1(${calculateCGI(h.players[0])}) P2(${calculateCGI(h.players[1])}) vs P3(${calculateCGI(h.players[2])}) P4(${calculateCGI(h.players[3])})</div>`).join('');
         }
-
-        function clearAll() { if(confirm('Clear all logs?')) { localStorage.clear(); location.reload(); } }
-
         render();
     </script>
 </body>
