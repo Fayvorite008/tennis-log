@@ -2,88 +2,97 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>双打现形现场</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        body { background-color: #0f172a; color: white; }
-        .player-card { background: #1e293b; border-radius: 12px; position: relative; border-left: 6px solid transparent; }
-        .team-indigo { border-left-color: #6366f1; }
-        .team-pink { border-left-color: #ec4899; }
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .btn { background: rgba(255,255,255,0.05); padding: 10px 4px; border-radius: 8px; text-align: center; cursor: pointer; }
-        .btn:active { background: rgba(255,255,255,0.2); }
-        input { background: transparent; border: none; font-weight: bold; width: 80%; }
+        body { background-color: #0f172a; color: white; -webkit-font-smoothing: antialiased; }
+        .player-card { background: #1e293b; border-radius: 12px; border-left: 6px solid transparent; transition: all 0.2s; }
+        .team-indigo { border-left-color: #6366f1; box-shadow: 0 4px 15px -5px rgba(99, 102, 241, 0.3); }
+        .team-pink { border-left-color: #ec4899; box-shadow: 0 4px 15px -5px rgba(236, 72, 153, 0.3); }
+        .stat-btn { background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; user-select: none; }
+        .stat-btn:active { background: rgba(255,255,255,0.15); transform: scale(0.96); }
+        input { background: transparent; border: none; font-weight: 800; width: 100%; outline: none; }
     </style>
 </head>
 <body class="p-4 flex flex-col items-center">
-    <div id="capture-box" class="w-full max-w-md p-6 bg-[#0f172a] rounded-xl">
-        <h1 class="text-center text-xl font-black mb-6">谁是菜狗？现形现场 🐶</h1>
+
+    <div id="capture-box" class="w-full max-w-md p-6 bg-[#0f172a]">
+        <h1 class="text-center text-xl font-black italic mb-2">谁是菜狗？现形现场 🐶</h1>
+        <p class="text-center text-[10px] text-slate-500 tracking-widest mb-6 uppercase">Love All Doubles Session</p>
         
         <div class="grid grid-cols-2 gap-4">
             <div class="player-card team-indigo p-4">
-                <input value="PLAYER A" class="text-indigo-400 mb-3 uppercase">
-                <div class="stat-grid text-[10px]" data-p="0"></div>
-                <div class="mt-4 pt-2 border-t border-white/5 text-center font-bold text-indigo-400 perf-val">PERF: 0</div>
+                <input value="PLAYER A" class="text-indigo-400 text-sm mb-3">
+                <div class="grid grid-cols-2 gap-2 text-[9px] font-bold" id="grid-0"></div>
+                <div class="mt-4 pt-2 border-t border-white/5 text-center font-black text-indigo-400 text-xs perf">PERF: 0</div>
             </div>
             <div class="player-card team-indigo p-4">
-                <input value="PLAYER B" class="text-indigo-400 mb-3 uppercase">
-                <div class="stat-grid text-[10px]" data-p="1"></div>
-                <div class="mt-4 pt-2 border-t border-white/5 text-center font-bold text-indigo-400 perf-val">PERF: 0</div>
+                <input value="PLAYER B" class="text-indigo-400 text-sm mb-3">
+                <div class="grid grid-cols-2 gap-2 text-[9px] font-bold" id="grid-1"></div>
+                <div class="mt-4 pt-2 border-t border-white/5 text-center font-black text-indigo-400 text-xs perf">PERF: 0</div>
             </div>
             <div class="player-card team-pink p-4">
-                <input value="PLAYER C" class="text-pink-400 mb-3 uppercase">
-                <div class="stat-grid text-[10px]" data-p="2"></div>
-                <div class="mt-4 pt-2 border-t border-white/5 text-center font-bold text-pink-400 perf-val">PERF: 0</div>
+                <input value="PLAYER C" class="text-pink-400 text-sm mb-3">
+                <div class="grid grid-cols-2 gap-2 text-[9px] font-bold" id="grid-2"></div>
+                <div class="mt-4 pt-2 border-t border-white/5 text-center font-black text-pink-400 text-xs perf">PERF: 0</div>
             </div>
             <div class="player-card team-pink p-4">
-                <input value="PLAYER D" class="text-pink-400 mb-3 uppercase">
-                <div class="stat-grid text-[10px]" data-p="3"></div>
-                <div class="mt-4 pt-2 border-t border-white/5 text-center font-bold text-pink-400 perf-val">PERF: 0</div>
+                <input value="PLAYER D" class="text-pink-400 text-sm mb-3">
+                <div class="grid grid-cols-2 gap-2 text-[9px] font-bold" id="grid-3"></div>
+                <div class="mt-4 pt-2 border-t border-white/5 text-center font-black text-pink-400 text-xs perf">PERF: 0</div>
             </div>
         </div>
     </div>
 
-    <div class="mt-10 flex gap-4">
-        <button onclick="takeShot()" class="bg-indigo-600 px-6 py-3 rounded-full font-bold text-sm">导出处刑单 📸</button>
-        <button onclick="location.reload()" class="bg-slate-700 px-6 py-3 rounded-full font-bold text-sm">重置</button>
+    <div class="mt-8 flex gap-3">
+        <button onclick="takeShot()" class="bg-indigo-600 px-6 py-3 rounded-full font-bold text-xs shadow-lg shadow-indigo-500/40">导出处刑单 📸</button>
+        <button onclick="window.location.reload()" class="bg-slate-800 px-6 py-3 rounded-full font-bold text-xs">重置</button>
     </div>
 
     <script>
-        const stats = [
-            {id:'1st', label:'1ST IN'}, {id:'df', label:'DF'}, {id:'ue', label:'UE'},
-            {id:'wn', label:'WN'}, {id:'vol', label:'VOL'}
+        const config = [
+            {id:'1st', label:'1ST IN'}, {id:'df', label:'DF'}, 
+            {id:'ue', label:'UE'}, {id:'wn', label:'WN'}, {id:'vol', label:'VOL'}
         ];
-        const data = Array(4).fill().map(() => ({ '1st':0, df:0, ue:0, wn:0, vol:0 }));
+        const players = Array(4).fill().map(() => ({'1st':0, 'df':0, 'ue':0, 'wn':0, 'vol':0}));
 
-        document.querySelectorAll('.stat-grid').forEach((grid, pIdx) => {
-            stats.forEach(s => {
-                const b = document.createElement('div');
-                b.className = 'btn';
-                b.innerHTML = `<div class="opacity-40 mb-1">${s.label}</div><div class="text-lg font-bold" id="p${pIdx}-${s.id}">0</div>`;
-                b.onclick = () => { data[pIdx][s.id]++; updateUI(pIdx, s.id); };
-                // 长按减分逻辑
-                let t; b.onmousedown = b.ontouchstart = () => { t = setTimeout(() => { if(data[pIdx][s.id]>0) data[pIdx][s.id]--; updateUI(pIdx, s.id); }, 600); };
-                b.onmouseup = b.ontouchend = () => clearTimeout(t);
-                grid.appendChild(b);
+        // 初始化界面
+        for(let i=0; i<4; i++) {
+            const grid = document.getElementById(`grid-${i}`);
+            config.forEach(s => {
+                const btn = document.createElement('div');
+                btn.className = 'stat-btn p-2 flex flex-col items-center justify-center';
+                btn.innerHTML = `<span class="opacity-40 mb-1">${s.label}</span><span id="p${i}-${s.id}">0</span>`;
+                
+                // 单击 +1
+                btn.onclick = () => { players[i][s.id]++; refresh(i, s.id); };
+                // 长按 -1 (兼容移动端)
+                let timer;
+                const down = () => { timer = setTimeout(() => { if(players[i][s.id]>0) players[i][s.id]--; refresh(i, s.id); }, 600); };
+                btn.onmousedown = btn.ontouchstart = down;
+                btn.onmouseup = btn.ontouchend = () => clearTimeout(timer);
+                
+                grid.appendChild(btn);
             });
-        });
-
-        function updateUI(pIdx, sId) {
-            document.getElementById(`p${pIdx}-${sId}`).innerText = data[pIdx][sId];
-            const p = data[pIdx];
-            const score = (p.wn * 2 + p.vol) - (p.df + p.ue);
-            document.querySelectorAll('.perf-val')[pIdx].innerText = `PERF: ${score}`;
         }
 
-        function takeShot() {
-            html2canvas(document.querySelector("#capture-box"), { backgroundColor: "#0f172a", scale: 2 }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'Tennis-Doubles-Log.png';
-                link.href = canvas.toDataURL();
-                link.click();
-            });
+        function refresh(pIdx, sId) {
+            document.getElementById(`p${pIdx}-${sId}`).innerText = players[pIdx][sId];
+            const p = players[pIdx];
+            const score = (p.wn * 2 + p.vol) - (p.df + p.ue);
+            document.querySelectorAll('.perf')[pIdx].innerText = `PERF: ${score}`;
+        }
+
+        async function takeShot() {
+            if(typeof html2canvas === 'undefined') { alert('插件还在加载，请稍等一秒'); return; }
+            const box = document.querySelector("#capture-box");
+            const canvas = await html2canvas(box, { backgroundColor:'#0f172a', scale: 2 });
+            const link = document.createElement('a');
+            link.download = `菜狗现形-${new Date().getTime()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
         }
     </script>
 </body>
