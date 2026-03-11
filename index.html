@@ -2,34 +2,40 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Love All Log | 菜狗记录库</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; }
-        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s; }
-        .glass-card:hover { transform: translateY(-5px); border-color: rgba(99, 102, 241, 0.5); }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0b1120; color: white; -webkit-font-smoothing: antialiased; }
+        .nav-card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.03); transition: all 0.3s; }
+        .nav-card:hover { transform: translateY(-5px); border-color: rgba(163, 230, 53, 0.3); box-shadow: 0 10px 30px -10px rgba(163, 230, 53, 0.2); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-6">
-    <div class="text-center mb-12">
-        <h1 class="text-4xl font-black italic uppercase mb-2">LOVE ALL <span class="text-indigo-400">LOG</span> 🐶</h1>
-        <p class="text-slate-500 text-xs tracking-widest">菜狗记录库 · 无论单双，都要优雅</p>
-    </div>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <header class="text-center mb-16 mt-4">
+        <h1 class="text-4xl font-800 tracking-tighter italic text-white">LOVE ALL <span class="text-lime-400">LOG</span> 🐶</h1>
+        <p class="text-slate-500 text-[10px] mt-1 uppercase tracking-[0.3em] font-bold">菜狗记录库 · 无论单双，都要优雅</p>
+    </header>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
-        <a href="battle/index.html" class="glass-card p-10 rounded-3xl flex flex-col items-center">
-            <span class="text-4xl mb-4">🎾</span>
+        <a href="battle/index.html" class="nav-card p-10 rounded-3xl flex flex-col items-center">
+            <span class="text-5xl mb-6">🎾</span>
             <h2 class="text-xl font-bold">Love All 对战</h2>
-            <p class="text-slate-400 text-xs mt-2">单人/1v1 表现分记录</p>
+            <p class="text-slate-400 text-xs mt-2 uppercase tracking-wider">单人/1V1 表现分记录</p>
         </a>
 
-        <a href="doubles/index.html" class="glass-card p-10 rounded-3xl flex flex-col items-center border-pink-500/20">
-            <span class="text-4xl mb-4">👯‍♂️</span>
+        <a href="doubles/index.html" class="nav-card p-10 rounded-3xl flex flex-col items-center">
+            <span class="text-5xl mb-6">👯‍♂️</span>
             <h2 class="text-xl font-bold">Love All 双打</h2>
-            <p class="text-slate-400 text-xs mt-2">双打 · 谁是真大腿</p>
+            <p class="text-slate-400 text-xs mt-2 uppercase tracking-wider">双打 · 谁是真大腿</p>
         </a>
     </div>
+
+    <footer class="mt-20 py-3 px-6 bg-slate-900/50 rounded-full border border-white/5 text-[9px] text-slate-700 uppercase tracking-widest font-bold">
+        Faye's Personal Lab · Vibe Coding 1.0
+    </footer>
+
 </body>
 </html>
-
