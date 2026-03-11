@@ -3,97 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love All Doubles | 现形现场</title>
+    <title>双打现形现场</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
-        body { background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; }
-        .player-card { background: #1e293b; border-radius: 16px; overflow: hidden; position: relative; transition: transform 0.2s; }
-        .side-bar-1 { width: 6px; background: #6366f1; position: absolute; left: 0; top: 0; bottom: 0; }
-        .side-bar-2 { width: 6px; background: #ec4899; position: absolute; left: 0; top: 0; bottom: 0; }
-        .stat-btn { background: rgba(255,255,255,0.05); border-radius: 8px; transition: all 0.1s; -webkit-tap-highlight-color: transparent; }
-        .stat-btn:active { background: rgba(255,255,255,0.2); transform: scale(0.95); }
-        input { background: transparent; border: none; outline: none; text-align: center; color: white; width: 100%; font-weight: bold; }
+        body { background-color: #0f172a; color: white; }
+        .player-card { background: #1e293b; border-radius: 12px; position: relative; border-left: 6px solid transparent; }
+        .team-indigo { border-left-color: #6366f1; }
+        .team-pink { border-left-color: #ec4899; }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .btn { background: rgba(255,255,255,0.05); padding: 10px 4px; border-radius: 8px; text-align: center; cursor: pointer; }
+        .btn:active { background: rgba(255,255,255,0.2); }
+        input { background: transparent; border: none; font-weight: bold; width: 80%; }
     </style>
 </head>
-<body class="p-4 min-h-screen flex flex-col items-center">
-
-    <div id="capture-area" class="w-full max-w-md p-4 bg-[#0f172a]">
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-black italic">谁是菜狗？现形现场 🐶</h1>
-            <p class="text-slate-500 text-[10px] tracking-[0.2em] uppercase">Love All Doubles Session</p>
-        </div>
-
+<body class="p-4 flex flex-col items-center">
+    <div id="capture-box" class="w-full max-w-md p-6 bg-[#0f172a] rounded-xl">
+        <h1 class="text-center text-xl font-black mb-6">谁是菜狗？现形现场 🐶</h1>
+        
         <div class="grid grid-cols-2 gap-4">
-            <div class="player-card p-4 pl-6"><div class="side-bar-1"></div><input value="PLAYER A">
-                <div class="stats mt-3 space-y-2 text-xs"></div>
-                <div class="perf mt-3 pt-2 border-t border-white/5 text-center font-bold text-indigo-400">PERF: 0</div>
+            <div class="player-card team-indigo p-4">
+                <input value="PLAYER A" class="text-indigo-400 mb-3 uppercase">
+                <div class="stat-grid text-[10px]" data-p="0"></div>
+                <div class="mt-4 pt-2 border-t border-white/5 text-center font-bold text-indigo-400 perf-val">PERF: 0</div>
             </div>
-            <div class="player-card p-4 pl-6"><div class="side-bar-1"></div><input value="PLAYER B">
-                <div class="stats mt-3 space-y-2 text-xs"></div>
-                <div class="perf mt-3 pt-2 border-t border-white/5 text-center font-bold text-indigo-400">PERF: 0</div>
+            <div class="player-card team-indigo p-4">
+                <input value="PLAYER B" class="text-indigo-400 mb-3 uppercase">
+                <div class="stat-grid text-[10px]" data-p="1"></div>
+                <div class="mt-4 pt-2 border-t border-white/5 text-center font-bold text-indigo-400 perf-val">PERF: 0</div>
             </div>
-            <div class="player-card p-4 pl-6"><div class="side-bar-2"></div><input value="PLAYER C">
-                <div class="stats mt-3 space-y-2 text-xs"></div>
-                <div class="perf mt-3 pt-2 border-t border-white/5 text-center font-bold text-pink-400">PERF: 0</div>
+            <div class="player-card team-pink p-4">
+                <input value="PLAYER C" class="text-pink-400 mb-3 uppercase">
+                <div class="stat-grid text-[10px]" data-p="2"></div>
+                <div class="mt-4 pt-2 border-t border-white/5 text-center font-bold text-pink-400 perf-val">PERF: 0</div>
             </div>
-            <div class="player-card p-4 pl-6"><div class="side-bar-2"></div><input value="PLAYER D">
-                <div class="stats mt-3 space-y-2 text-xs"></div>
-                <div class="perf mt-3 pt-2 border-t border-white/5 text-center font-bold text-pink-400">PERF: 0</div>
+            <div class="player-card team-pink p-4">
+                <input value="PLAYER D" class="text-pink-400 mb-3 uppercase">
+                <div class="stat-grid text-[10px]" data-p="3"></div>
+                <div class="mt-4 pt-2 border-t border-white/5 text-center font-bold text-pink-400 perf-val">PERF: 0</div>
             </div>
         </div>
     </div>
 
-    <div class="mt-8 flex gap-4">
-        <button onclick="exportImage()" class="bg-indigo-600 px-6 py-3 rounded-full font-bold text-sm shadow-lg shadow-indigo-500/30">导出今日处刑单 📸</button>
+    <div class="mt-10 flex gap-4">
+        <button onclick="takeShot()" class="bg-indigo-600 px-6 py-3 rounded-full font-bold text-sm">导出处刑单 📸</button>
         <button onclick="location.reload()" class="bg-slate-700 px-6 py-3 rounded-full font-bold text-sm">重置</button>
     </div>
 
     <script>
-        const statsConfig = [
-            { id: '1st', label: '1ST IN' }, { id: 'df', label: 'DF' },
-            { id: 'ue', label: 'UE' }, { id: 'wn', label: 'WN' }, { id: 'vol', label: 'VOL' }
+        const stats = [
+            {id:'1st', label:'1ST IN'}, {id:'df', label:'DF'}, {id:'ue', label:'UE'},
+            {id:'wn', label:'WN'}, {id:'vol', label:'VOL'}
         ];
+        const data = Array(4).fill().map(() => ({ '1st':0, df:0, ue:0, wn:0, vol:0 }));
 
-        document.querySelectorAll('.stats').forEach((container, pIdx) => {
-            statsConfig.forEach(s => {
-                const btn = document.createElement('div');
-                btn.className = 'stat-btn p-2 flex justify-between items-center cursor-pointer';
-                btn.innerHTML = `<span class="opacity-50">${s.label}</span><span class="font-mono font-bold text-lg" id="p${pIdx}-${s.id}">0</span>`;
-                
-                // 点击 +1
-                btn.onclick = () => updateStat(pIdx, s.id, 1);
-                // 长按 -1 (移动端友好)
-                let timer;
-                btn.onmousedown = btn.ontouchstart = (e) => { timer = setTimeout(() => updateStat(pIdx, s.id, -1), 500); };
-                btn.onmouseup = btn.ontouchend = () => clearTimeout(timer);
-                
-                container.appendChild(btn);
+        document.querySelectorAll('.stat-grid').forEach((grid, pIdx) => {
+            stats.forEach(s => {
+                const b = document.createElement('div');
+                b.className = 'btn';
+                b.innerHTML = `<div class="opacity-40 mb-1">${s.label}</div><div class="text-lg font-bold" id="p${pIdx}-${s.id}">0</div>`;
+                b.onclick = () => { data[pIdx][s.id]++; updateUI(pIdx, s.id); };
+                // 长按减分逻辑
+                let t; b.onmousedown = b.ontouchstart = () => { t = setTimeout(() => { if(data[pIdx][s.id]>0) data[pIdx][s.id]--; updateUI(pIdx, s.id); }, 600); };
+                b.onmouseup = b.ontouchend = () => clearTimeout(t);
+                grid.appendChild(b);
             });
         });
 
-        function updateStat(pIdx, sId, val) {
-            const el = document.getElementById(`p${pIdx}-${sId}`);
-            let cur = parseInt(el.innerText) + val;
-            el.innerText = cur < 0 ? 0 : cur;
-            calcPerf(pIdx);
+        function updateUI(pIdx, sId) {
+            document.getElementById(`p${pIdx}-${sId}`).innerText = data[pIdx][sId];
+            const p = data[pIdx];
+            const score = (p.wn * 2 + p.vol) - (p.df + p.ue);
+            document.querySelectorAll('.perf-val')[pIdx].innerText = `PERF: ${score}`;
         }
 
-        function calcPerf(pIdx) {
-            const getVal = (id) => parseInt(document.getElementById(`p${pIdx}-${id}`).innerText);
-            const score = (getVal('wn') * 2 + getVal('vol')) - (getVal('df') + getVal('ue'));
-            document.querySelectorAll('.perf')[pIdx].innerText = `PERF: ${score}`;
-        }
-
-        function exportImage() {
-            const btn = event.target;
-            btn.innerText = "生成中...";
-            html2canvas(document.querySelector("#capture-area"), { backgroundColor: "#0f172a", scale: 2 }).then(canvas => {
+        function takeShot() {
+            html2canvas(document.querySelector("#capture-box"), { backgroundColor: "#0f172a", scale: 2 }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `LoveAll-Doubles-${new Date().toLocaleDateString()}.png`;
+                link.download = 'Tennis-Doubles-Log.png';
                 link.href = canvas.toDataURL();
                 link.click();
-                btn.innerText = "导出今日处刑单 📸";
             });
         }
     </script>
