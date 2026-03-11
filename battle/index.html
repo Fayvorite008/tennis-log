@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Love All Log 🎾</title>
+    <title>Love All Log 🎾 CGI Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
@@ -17,121 +17,30 @@
 <body class="p-4 pb-20">
     <header class="mb-6 mt-4 text-center">
         <h1 class="text-3xl font-800 tracking-tighter italic text-white">Love All <span class="text-lime-400">Log</span> 🎾</h1>
-        <p class="text-slate-500 text-[10px] mt-1 uppercase tracking-[0.3em] font-bold">Every Point Starts with Love</p>
+        <p class="text-slate-500 text-[10px] mt-1 uppercase tracking-[0.3em] font-bold text-lime-500/50">CGI Performance Index V6</p>
     </header>
 
     <div class="glass-panel p-5 mb-6 shadow-2xl">
         <div class="grid grid-cols-2 gap-4 mb-4">
-            <div class="space-y-1">
-                <label class="text-[9px] text-slate-500 uppercase ml-1 font-bold">Player A</label>
-                <input id="p1Name" type="text" placeholder="Entry Name" class="w-full bg-slate-900/50 rounded-lg p-3 text-sm outline-none border border-white/5 focus:border-lime-500/50 transition-all">
+            <div class="text-center">
+                <input id="p1Name" type="text" placeholder="PLAYER A" class="w-full bg-transparent text-center text-sm font-bold text-lime-400 outline-none mb-2">
+                <div id="p1-cgi-live" class="text-2xl font-black text-white">50</div>
+                <p class="text-[8px] text-slate-500 uppercase font-bold tracking-widest">Live CGI</p>
             </div>
-            <div class="space-y-1">
-                <label class="text-[9px] text-slate-500 uppercase ml-1 font-bold">Player B</label>
-                <input id="p2Name" type="text" placeholder="Entry Name" class="w-full bg-slate-900/50 rounded-lg p-3 text-sm outline-none border border-white/5 focus:border-sky-500/50 transition-all">
+            <div class="text-center">
+                <input id="p2Name" type="text" placeholder="PLAYER B" class="w-full bg-transparent text-center text-sm font-bold text-sky-400 outline-none mb-2">
+                <div id="p2-cgi-live" class="text-2xl font-black text-white">50</div>
+                <p class="text-[8px] text-slate-500 uppercase font-bold tracking-widest">Live CGI</p>
             </div>
         </div>
-        <div class="grid grid-cols-2 gap-4">
-            <input id="matchScore" type="text" placeholder="Score (e.g. 6:4)" class="bg-slate-900/50 rounded-lg p-3 text-sm border border-white/5">
-            <input id="location" type="text" placeholder="Location" class="bg-slate-900/50 rounded-lg p-3 text-sm border border-white/5">
+        <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
+            <input id="matchScore" type="text" placeholder="SCORE 0:0" class="bg-slate-900/50 rounded-lg p-3 text-xs border border-white/5 text-center">
+            <input id="location" type="text" placeholder="LOCATION" class="bg-slate-900/50 rounded-lg p-3 text-xs border border-white/5 text-center">
         </div>
     </div>
 
     <div class="space-y-5 mb-8">
         <div class="stat-group">
-            <div class="text-center text-[10px] font-bold text-lime-400 uppercase tracking-widest mb-2 opacity-80">🏆 Winners 👑</div>
+            <div class="text-center text-[10px] font-bold text-lime-400 uppercase tracking-widest mb-2 opacity-80">🏆 Winners (+6)</div>
             <div class="grid grid-cols-2 gap-3">
-                <button onclick="count('p1', 'wn')" class="glass-panel py-6 btn-tap border-lime-500/20 text-center"><span id="p1-wn" class="text-4xl font-bold text-lime-400">0</span></button>
-                <button onclick="count('p2', 'wn')" class="glass-panel py-6 btn-tap border-lime-500/20 text-center"><span id="p2-wn" class="text-4xl font-bold text-lime-400">0</span></button>
-            </div>
-        </div>
-
-        <div class="stat-group">
-            <div class="text-center text-[10px] font-bold text-red-400 uppercase tracking-widest mb-2 opacity-70">Double Faults</div>
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="count('p1', 'df')" class="glass-panel py-4 btn-tap border-red-500/10 text-center"><span id="p1-df" class="text-2xl font-bold text-red-400/90">0</span></button>
-                <button onclick="count('p2', 'df')" class="glass-panel py-4 btn-tap border-red-500/10 text-center"><span id="p2-df" class="text-2xl font-bold text-red-400/90">0</span></button>
-            </div>
-        </div>
-
-        <div class="stat-group">
-            <div class="text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Unforced Errors (Net / Out)</div>
-            <div class="grid grid-cols-2 gap-3">
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="count('p1', 'net')" class="glass-panel py-3 btn-tap text-[10px] font-bold text-pink-400">N: <span id="p1-net">0</span></button>
-                    <button onclick="count('p1', 'out')" class="glass-panel py-3 btn-tap text-[10px] font-bold text-orange-400">O: <span id="p1-out">0</span></button>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="count('p2', 'net')" class="glass-panel py-3 btn-tap text-[10px] font-bold text-pink-400">N: <span id="p2-net">0</span></button>
-                    <button onclick="count('p2', 'out')" class="glass-panel py-3 btn-tap text-[10px] font-bold text-orange-400">O: <span id="p2-out">0</span></button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="flex gap-3 mb-12">
-        <button onclick="saveSession()" class="flex-[2] bg-white text-black font-800 py-4 rounded-xl btn-tap uppercase tracking-tight shadow-lg">Save Session</button>
-        <button onclick="resetCurrent()" class="flex-1 bg-slate-800 text-slate-500 font-bold py-4 rounded-xl btn-tap text-[10px] uppercase">Reset</button>
-    </div>
-
-    <section class="mb-10">
-        <div class="flex justify-between items-end mb-4 px-1">
-            <h2 class="text-[10px] font-bold uppercase tracking-widest text-slate-500 italic">Saved Logs</h2>
-            <button onclick="exportCSV()" class="text-[10px] text-lime-400 underline uppercase">Export CSV</button>
-        </div>
-        <div id="historyList" class="space-y-4"></div>
-    </section>
-
-    <section>
-        <h2 class="text-[10px] font-bold uppercase tracking-widest text-slate-500 italic mb-4 px-1">Consistency Tracker</h2>
-        <div id="playerCenter" class="space-y-3"></div>
-    </section>
-
-    <script>
-        let p1Data = { wn: 0, df: 0, net: 0, out: 0 }, p2Data = { wn: 0, df: 0, net: 0, out: 0 };
-        function count(p, type) { (p === 'p1' ? p1Data : p2Data)[type]++; document.getElementById(`${p}-${type}`).innerText = (p === 'p1' ? p1Data : p2Data)[type]; if (window.navigator.vibrate) window.navigator.vibrate(15); }
-        function resetCurrent() { if(!confirm('Clear?')) return; p1Data = { wn: 0, df: 0, net: 0, out: 0 }; p2Data = { wn: 0, df: 0, net: 0, out: 0 }; ['p1','p2'].forEach(p=>['wn','df','net','out'].forEach(t=>document.getElementById(`${p}-${t}`).innerText='0')); }
-        function saveSession() {
-            const match = { id: Date.now(), date: new Date().toLocaleDateString(), n1: document.getElementById('p1Name').value||'P1', n2: document.getElementById('p2Name').value||'P2', score: document.getElementById('matchScore').value||'0:0', loc: document.getElementById('location').value||'Court', p1: {...p1Data}, p2: {...p2Data} };
-            let h = JSON.parse(localStorage.getItem('love_all_log_v5') || '[]'); h.unshift(match); localStorage.setItem('love_all_log_v5', JSON.stringify(h)); renderAll(); alert('Logged with love!');
-        }
-        function renderAll() {
-            const h = JSON.parse(localStorage.getItem('love_all_log_v5') || '[]');
-            document.getElementById('historyList').innerHTML = h.map(m => `
-                <div class="glass-panel p-4 relative group">
-                    <button onclick="deleteSession(${m.id})" class="absolute right-4 top-4 text-[9px] text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">DELETE</button>
-                    <div class="flex gap-2 items-center mb-3">
-                        <span class="win-tag px-2 py-0.5 rounded text-[8px] font-bold uppercase">Record</span>
-                        <span class="text-slate-600 text-[9px] font-bold uppercase tracking-tighter">${m.date} @ ${m.loc}</span>
-                    </div>
-                    <div class="flex justify-between items-center mb-4 px-1">
-                        <div class="text-sm font-bold w-[35%] truncate">${m.n1}</div>
-                        <div class="text-lime-400 font-mono text-xl font-bold italic tracking-widest">${m.score}</div>
-                        <div class="text-sm font-bold w-[35%] text-right truncate">${m.n2}</div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 border-t border-white/5 pt-3">
-                        <div class="text-[10px] text-slate-400"><p class="text-lime-400 font-bold tracking-widest">WINNER: ${m.p1.wn}</p><p>DF: ${m.p1.df} | UE: ${m.p1.net+m.p1.out}</p></div>
-                        <div class="text-[10px] text-slate-400 text-right border-l border-white/5"><p class="text-lime-400 font-bold tracking-widest">${m.p2.wn} :WINNER</p><p>UE: ${m.p2.net+m.p2.out} | DF: ${m.p2.df}</p></div>
-                    </div>
-                </div>`).join('');
-            const players = {};
-            h.forEach(m => { [ {n:m.n1, d:m.p1}, {n:m.n2, d:m.p2} ].forEach(obj => { if(!players[obj.n]) players[obj.n]={m:0, wn:0, ue:0}; players[obj.n].m++; players[obj.n].wn += obj.d.wn; players[obj.n].ue += (obj.d.net+obj.d.out); }); });
-            document.getElementById('playerCenter').innerHTML = Object.entries(players).map(([name, s]) => `
-                <div class="glass-panel p-4 flex justify-between items-center">
-                    <div><p class="font-bold text-xs">${name}</p><p class="text-[8px] text-slate-600 font-bold uppercase">Consistency Index</p></div>
-                    <div class="flex gap-4 text-right">
-                        <div><p class="text-[8px] text-slate-500">MATCHES</p><p class="text-xs font-bold">${s.m}</p></div>
-                        <div><p class="text-[8px] text-slate-500">AVG WN</p><p class="text-xs font-bold text-lime-400">${(s.wn/s.m).toFixed(1)}</p></div>
-                    </div>
-                </div>`).join('');
-        }
-        function deleteSession(id) { if(confirm('Delete?')) { let h = JSON.parse(localStorage.getItem('love_all_log_v5') || '[]'); h = h.filter(x => x.id !== id); localStorage.setItem('love_all_log_v5', JSON.stringify(h)); renderAll(); } }
-        function exportCSV() {
-            const h = JSON.parse(localStorage.getItem('love_all_log_v5') || '[]');
-            let csv = "Date,Score,P1,P1_WN,P1_UE,P2,P2_WN,P2_UE\n" + h.map(m => `${m.date},${m.score},${m.n1},${m.p1.wn},${m.p1.net+m.p1.out},${m.n2},${m.p2.wn},${m.p2.net+m.p2.out}`).join('\n');
-            const blob = new Blob([csv], {type:'text/csv'}); const url = window.URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'Love_All_Report.csv'; a.click();
-        }
-        renderAll();
-    </script>
-</body>
-</html>
+                <button onclick="count('p1', 'wn')" class="glass-panel py-6 btn-tap border-lime-
