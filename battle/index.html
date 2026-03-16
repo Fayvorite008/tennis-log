@@ -8,9 +8,13 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #0b0f19; color: #e2e8f0; touch-action: manipulation; }
-        .glass-panel { background: rgba(22, 30, 46, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; }
-        .btn-tap:active { transform: scale(0.95); }
-        .win-tag { background: rgba(163, 230, 53, 0.1); color: #a3e635; border: 1px solid rgba(163, 230, 53, 0.2); }
+        .glass-panel { background: rgba(22, 30, 46, 0.85); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; backdrop-filter: blur(8px); }
+        .btn-tap { transition: transform 0.15s ease; }
+        .btn-tap:active { transform: scale(0.96); }
+        .win-tag { background: rgba(163, 230, 53, 0.12); color: #a3e635; border: 1px solid rgba(163, 230, 53, 0.25); }
+        .stat-bar { height: 6px; border-radius: 999px; overflow: hidden; background: rgba(255,255,255,0.06); }
+        .stat-bar-fill { height: 100%; border-radius: 999px; transition: width 0.3s ease; }
+        .tag { font-size: 9px; padding: 2px 6px; border-radius: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
         ::-webkit-scrollbar { display: none; }
     </style>
 </head>
@@ -19,6 +23,7 @@
         <h1 class="text-3xl font-800 tracking-tighter italic text-white">Love All <span class="text-lime-400">Log</span> 🎾</h1>
         <p class="text-slate-500 text-[10px] mt-1 uppercase tracking-[0.3em] font-bold">Every Point Starts with Love</p>
     </header>
+
     <div class="glass-panel p-5 mb-6 shadow-2xl">
         <div class="grid grid-cols-2 gap-4 mb-4">
             <div class="space-y-1">
@@ -35,6 +40,152 @@
             <input id="location" type="text" placeholder="Location" class="bg-slate-900/50 rounded-lg p-3 text-sm border border-white/5">
         </div>
     </div>
+
     <div class="space-y-5 mb-8">
         <div class="stat-group">
-            <div class="text-center text-[10px] font-bold text-lime-
+            <div class="text-center text-[10px] font-bold text-lime-400 uppercase tracking-widest mb-2 opacity-80">🏆 Winners 👑</div>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="count('p1', 'wn')" class="glass-panel py-6 btn-tap border-lime-500/20 text-center"><span id="p1-wn" class="text-4xl font-bold text-lime-400">0</span></button>
+                <button onclick="count('p2', 'wn')" class="glass-panel py-6 btn-tap border-lime-500/20 text-center"><span id="p2-wn" class="text-4xl font-bold text-lime-400">0</span></button>
+            </div>
+        </div>
+
+        <div class="stat-group">
+            <div class="text-center text-[10px] font-bold text-red-400 uppercase tracking-widest mb-2 opacity-70">Double Faults</div>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="count('p1', 'df')" class="glass-panel py-4 btn-tap border-red-500/10 text-center"><span id="p1-df" class="text-2xl font-bold text-red-400/90">0</span></button>
+                <button onclick="count('p2', 'df')" class="glass-panel py-4 btn-tap border-red-500/10 text-center"><span id="p2-df" class="text-2xl font-bold text-red-400/90">0</span></button>
+            </div>
+        </div>
+
+        <div class="stat-group">
+            <div class="text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Unforced Errors (Net / Out)</div>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="count('p1', 'net')" class="glass-panel py-3 btn-tap text-[10px] font-bold text-pink-400">N: <span id="p1-net">0</span></button>
+                    <button onclick="count('p1', 'out')" class="glass-panel py-3 btn-tap text-[10px] font-bold text-orange-400">O: <span id="p1-out">0</span></button>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="count('p2', 'net')" class="glass-panel py-3 btn-tap text-[10px] font-bold text-pink-400">N: <span id="p2-net">0</span></button>
+                    <button onclick="count('p2', 'out')" class="glass-panel py-3 btn-tap text-[10px] font-bold text-orange-400">O: <span id="p2-out">0</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex gap-3 mb-12">
+        <button onclick="saveSession()" class="flex-[2] bg-white text-black font-800 py-4 rounded-xl btn-tap uppercase tracking-tight shadow-lg">Save Session</button>
+        <button onclick="resetCurrent()" class="flex-1 bg-slate-800 text-slate-500 font-bold py-4 rounded-xl btn-tap text-[10px] uppercase">Reset</button>
+    </div>
+
+    <section class="mb-10">
+        <div class="flex justify-between items-end mb-4 px-1">
+            <h2 class="text-[10px] font-bold uppercase tracking-widest text-slate-500 italic">Saved Logs</h2>
+            <button onclick="exportCSV()" class="text-[10px] text-lime-400 hover:text-lime-300 font-bold uppercase btn-tap">Export CSV</button>
+        </div>
+        <div id="historyList" class="space-y-4"></div>
+    </section>
+
+    <section>
+        <h2 class="text-[10px] font-bold uppercase tracking-widest text-slate-500 italic mb-4 px-1">Consistency Tracker</h2>
+        <div id="playerCenter" class="space-y-3"></div>
+    </section>
+
+    <script>
+        let p1Data = { wn: 0, df: 0, net: 0, out: 0 }, p2Data = { wn: 0, df: 0, net: 0, out: 0 };
+        function count(p, type) { (p === 'p1' ? p1Data : p2Data)[type]++; document.getElementById(`${p}-${type}`).innerText = (p === 'p1' ? p1Data : p2Data)[type]; if (window.navigator.vibrate) window.navigator.vibrate(15); }
+        function resetCurrent() { if(!confirm('Clear?')) return; p1Data = { wn: 0, df: 0, net: 0, out: 0 }; p2Data = { wn: 0, df: 0, net: 0, out: 0 }; ['p1','p2'].forEach(p=>['wn','df','net','out'].forEach(t=>document.getElementById(`${p}-${t}`).innerText='0')); }
+        function saveSession() {
+            const match = { id: Date.now(), date: new Date().toLocaleDateString(), n1: document.getElementById('p1Name').value||'P1', n2: document.getElementById('p2Name').value||'P2', score: document.getElementById('matchScore').value||'0:0', loc: document.getElementById('location').value||'Court', p1: {...p1Data}, p2: {...p2Data} };
+            let h = JSON.parse(localStorage.getItem('love_all_log_v5') || '[]'); h.unshift(match); localStorage.setItem('love_all_log_v5', JSON.stringify(h)); renderAll(); alert('Logged with love!');
+        }
+        function esc(s) { const d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+        function matchTags(m) {
+            const tags = [];
+            const totDf = (m.p1?.df || 0) + (m.p2?.df || 0);
+            const totNet = (m.p1?.net || 0) + (m.p2?.net || 0);
+            const totOut = (m.p1?.out || 0) + (m.p2?.out || 0);
+            const totUe = totNet + totOut;
+            const totWn = (m.p1?.wn || 0) + (m.p2?.wn || 0);
+            if (totDf > 5) tags.push({ label: 'Service Struggle ⚠️', class: 'bg-red-500/15 text-red-400 border-red-500/30' });
+            if (totNet >= 6 && totNet > totOut) tags.push({ label: 'Low Clearance 🕸️', class: 'bg-pink-500/15 text-pink-400 border-pink-500/30' });
+            if (totUe > 0 && totWn / totUe >= 1.2) tags.push({ label: 'Aggressive 🎾', class: 'bg-lime-500/15 text-lime-400 border-lime-500/30' });
+            if (totNet + totOut < 4 && totWn >= 4) tags.push({ label: 'Clean Hitting ✨', class: 'bg-sky-500/15 text-sky-400 border-sky-500/30' });
+            return tags;
+        }
+        function renderAll() {
+            const h = JSON.parse(localStorage.getItem('love_all_log_v5') || '[]');
+            document.getElementById('historyList').innerHTML = h.map(m => {
+                const netTotal = (m.p1?.net || 0) + (m.p2?.net || 0);
+                const outTotal = (m.p1?.out || 0) + (m.p2?.out || 0);
+                const total = netTotal + outTotal || 1;
+                const netPct = Math.round((netTotal / total) * 100);
+                const tags = matchTags(m);
+                return `
+                <div class="glass-panel p-4 relative group">
+                    <button onclick="deleteSession(${m.id})" class="absolute right-3 top-3 text-[9px] text-red-400/80 hover:text-red-400 font-bold uppercase border border-red-500/30 rounded-lg px-2 py-1 btn-tap">Del</button>
+                    <div class="grid grid-cols-1 sm:grid-cols-[1fr,auto] gap-4 pr-16 sm:pr-4">
+                        <div>
+                            <p class="text-slate-200 font-bold text-sm leading-tight">${esc(m.n1)} <span class="text-slate-500 font-normal">vs</span> ${esc(m.n2)}</p>
+                            <p class="text-lime-400 font-mono text-lg font-bold mt-1">${esc(m.score)}</p>
+                            <p class="text-slate-500 text-[10px] mt-1 uppercase tracking-wider">${esc(m.date)} · ${esc(m.loc)}</p>
+                            <div class="flex flex-wrap gap-1.5 mt-3">${tags.map(t => `<span class="tag border ${t.class}">${t.label}</span>`).join('')}</div>
+                            <div class="mt-3">
+                                <p class="text-[9px] text-slate-500 uppercase tracking-wider mb-1">Net vs Out</p>
+                                <div class="stat-bar flex">
+                                    <div class="stat-bar-fill bg-pink-500/80" style="width:${netPct}%"></div>
+                                    <div class="stat-bar-fill bg-orange-500/80" style="width:${100-netPct}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-[10px] border-l border-white/5 pl-4 self-start">
+                            <div class="text-slate-500 uppercase tracking-wider">P1</div>
+                            <div class="text-slate-500 uppercase tracking-wider text-right">P2</div>
+                            <div><span class="text-lime-400 font-bold">WN ${m.p1?.wn ?? 0}</span></div>
+                            <div class="text-right"><span class="text-lime-400 font-bold">${m.p2?.wn ?? 0} WN</span></div>
+                            <div>DF ${m.p1?.df ?? 0} · N ${m.p1?.net ?? 0} · O ${m.p1?.out ?? 0}</div>
+                            <div class="text-right">N ${m.p2?.net ?? 0} · O ${m.p2?.out ?? 0} · DF ${m.p2?.df ?? 0}</div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+            const players = {};
+            h.forEach(m => {
+                [ { n: m.n1, d: m.p1 }, { n: m.n2, d: m.p2 } ].forEach(obj => {
+                    const name = obj.n || 'Unknown';
+                    if (!players[name]) players[name] = { m: 0, wn: 0, ue: 0, df: 0 };
+                    players[name].m++;
+                    players[name].wn += (obj.d?.wn || 0);
+                    players[name].ue += ((obj.d?.net || 0) + (obj.d?.out || 0));
+                    players[name].df += (obj.d?.df || 0);
+                });
+            });
+            document.getElementById('playerCenter').innerHTML = Object.entries(players).map(([name, s]) => `
+                <div class="glass-panel p-4 flex justify-between items-center btn-tap">
+                    <div>
+                        <p class="font-bold text-sm text-slate-200">${esc(name)}</p>
+                        <p class="text-[8px] text-slate-500 uppercase tracking-wider mt-0.5">Consistency</p>
+                    </div>
+                    <div class="flex gap-5 text-right">
+                        <div><p class="text-[8px] text-slate-500 uppercase">Matches</p><p class="text-sm font-bold">${s.m}</p></div>
+                        <div><p class="text-[8px] text-slate-500 uppercase">Avg WN</p><p class="text-sm font-bold text-lime-400">${(s.wn / s.m).toFixed(1)}</p></div>
+                        <div><p class="text-[8px] text-slate-500 uppercase">Avg DF</p><p class="text-sm font-bold text-red-400/90">${(s.df / s.m).toFixed(1)}</p></div>
+                    </div>
+                </div>`).join('');
+        }
+        function deleteSession(id) { if(confirm('Delete?')) { let h = JSON.parse(localStorage.getItem('love_all_log_v5') || '[]'); h = h.filter(x => x.id !== id); localStorage.setItem('love_all_log_v5', JSON.stringify(h)); renderAll(); } }
+        function exportCSV() {
+            const h = JSON.parse(localStorage.getItem('love_all_log_v5') || '[]');
+            const header = 'Date,Score,Location,P1,P1_WN,P1_DF,P1_Net,P1_Out,P2,P2_WN,P2_DF,P2_Net,P2_Out';
+            const rows = h.map(m => {
+                const q = v => '"' + (v == null ? '' : String(v)).replace(/"/g, '""') + '"';
+                return [ m.date, m.score, m.loc, m.n1, (m.p1?.wn ?? ''), (m.p1?.df ?? ''), (m.p1?.net ?? ''), (m.p1?.out ?? ''), m.n2, (m.p2?.wn ?? ''), (m.p2?.df ?? ''), (m.p2?.net ?? ''), (m.p2?.out ?? '') ].map(q).join(',');
+            });
+            const csv = '\uFEFF' + header + '\n' + rows.join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Love_All_Report.csv'; a.click(); URL.revokeObjectURL(a.href);
+        }
+        renderAll();
+    </script>
+</body>
+</html>
